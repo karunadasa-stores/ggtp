@@ -36,7 +36,6 @@ def welcome(_, message):  # Done
         if message.chat.id in admin_ids:
             count = 0
             print("Working")
-            msg_id = message.message_id + 1
             bot.send_message(message.chat.id, "<b>Subtitle Downloading start</b>")
             websites = ['baiscopelk', 'upasirasi', 'cineru', 'pirate']
             type = ['film', 'tv']
