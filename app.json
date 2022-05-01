@@ -1,0 +1,16 @@
+{
+    "name": "GGTP",
+    "description": "When you going to send file on telegram channel/group this bot will save that in database, So you can search that easily in inline mode",
+    "logo": "https://telegra.ph/file/c705fac44db2b8d7f47e7.jpg",
+    "keywords": [
+      "telegram",
+      "best",
+      "srilankan",
+      "pyrogram",
+      "media",
+      "search",
+      "channel",
+      "index",
+      "inline"
+    ]
+}
