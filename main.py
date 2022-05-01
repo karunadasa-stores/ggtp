@@ -33,7 +33,6 @@ def welcome(_, message):  # Done
         text = "Sorry {}, you are not an admin.🚫".format(message.chat.first_name)
         bot.send_message(message.chat.id, text)
     else:
-        bot.delete_messages(message.chat.id, message.message_id)
         if message.chat.id in admin_ids:
             count = 0
             print("Working")
