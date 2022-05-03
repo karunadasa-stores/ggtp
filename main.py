@@ -34,12 +34,14 @@ def welcome(_, message):  # Done
         bot.send_message(message.chat.id, text)
     else:
         msg_id = message.id+1
-        def send(text,message):
+        
+        def send(text,message,msg_id):
             try:
                 bot.edit_message_text(message.chat.id, msg_id, text)
             except:
                 bot.send_message(message.chat.id, text)
                 msg_id = msg_id+1
+                return msg_id
         if message.chat.id in admin_ids:
             count = 0
             print("Working")
@@ -58,11 +60,11 @@ def welcome(_, message):  # Done
                         if True and subtitle['title'] and subtitle is not None: # cond < 100
                             for num in range(len(subtitle['title'])):
                                 try:
-                                    send(f"Downloaded : {subtitle['title'][num]}", message)
-                                    downloaded_file = download(subtitle['link'][num], subtitle['title'][num])
-                                    for f in downloaded_file:
-                                        file = f.replace('\\', '/')
-                                        if is_new_file(file[file.rindex('/')+1:]):
+                                    if is_new_file(subtitle['title'][num]):
+                                        downloaded_file = download(subtitle['link'][num], subtitle['title'][num])
+                                        msg_id = send(f"Downloaded : {subtitle['title'][num]}", message, msg_id)
+                                        for f in downloaded_file:
+                                            file = f.replace('\\', '/')
                                             siteName = i.replace(i[0], i[0].upper())
                                             caption = f'<b>File Name : </b> \n{file[file.rindex("/") + 1:]}\n\n<b' \
                                                       f'>Source link : </b><a href="{subtitle["link"][num]}">from {siteName}' \
@@ -70,18 +72,18 @@ def welcome(_, message):  # Done
                                                       f'{bot_owner}">{bot_owner[bot_owner.rindex("/") + 1:]}</a></b> '
                                             for chat_id in database_channel:
                                                 bot.send_document(chat_id, f, caption=caption)
+                                            try:
+                                                os.remove(downloaded_file['name'])
+                                                print(downloaded_file)
+                                                print("File deleted\n\n")
+                                            except:
+                                                pass
                                         else:
-                                            cond += 1
-                                        try:
-                                            os.remove(downloaded_file['name'])
-                                            print(downloaded_file)
-                                            print("File deleted\n\n")
-                                        except:
+                                            import shutil
+                                            shutil.rmtree('Extract')
                                             pass
                                     else:
-                                        import shutil
-                                        shutil.rmtree('Extract')
-                                        pass
+                                        msg_id = send(f"Skipped : {subtitle['title'][num]}", message, msg_id)
                                 except Exception as e:
                                     print(e)
                                     print('404 error not found')
