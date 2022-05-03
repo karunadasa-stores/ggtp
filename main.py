@@ -33,17 +33,17 @@ def welcome(_, message):  # Done
         text = "Sorry {}, you are not an admin.🚫".format(message.chat.first_name)
         bot.send_message(message.chat.id, text)
     else:
-        msg_id = message.id+1
-        
-        def send(text,message,msg_id):
+        msg_id = int(message.id) + 1
+
+        def send(text, message):
+            global msg_id
             try:
                 bot.edit_message_text(message.chat.id, msg_id, text)
             except:
                 bot.send_message(message.chat.id, text)
-                msg_id = msg_id+1
-                return msg_id
+                msg_id = msg_id + 1
+
         if message.chat.id in admin_ids:
-            count = 0
             print("Working")
             bot.send_message(message.chat.id, "<b>Subtitle Downloading start</b>")
             websites = ['baiscopelk', 'upasirasi', 'cineru', 'pirate']
@@ -52,17 +52,15 @@ def welcome(_, message):  # Done
             for i in websites:
                 for x in type:
                     n = 0
-                    cond = 0
                     while True:  # website type
                         n = n + 1
                         print('\n', n, "page number")
                         subtitle = search_sub(n, i, type=x)
-                        if True and subtitle['title'] and subtitle is not None: # cond < 100
+                        if subtitle['title'] and subtitle is not None:  # cond < 100
                             for num in range(len(subtitle['title'])):
                                 try:
                                     if is_new_file(subtitle['title'][num]):
                                         downloaded_file = download(subtitle['link'][num], subtitle['title'][num])
-                                        msg_id = send(f"Downloaded : {subtitle['title'][num]}", message, msg_id)
                                         for f in downloaded_file:
                                             file = f.replace('\\', '/')
                                             siteName = i.replace(i[0], i[0].upper())
@@ -83,7 +81,7 @@ def welcome(_, message):  # Done
                                             shutil.rmtree('Extract')
                                             pass
                                     else:
-                                        msg_id = send(f"Skipped : {subtitle['title'][num]}", message, msg_id)
+                                        send(f"Skipped : {subtitle['title'][num]}", message)
                                 except Exception as e:
                                     print(e)
                                     print('404 error not found')
@@ -91,7 +89,7 @@ def welcome(_, message):  # Done
                         else:
                             break
             else:
-                bot.send_message(message.chat.id,'Compleated')
+                bot.send_message(message.chat.id, 'Compleated')
                 print('completed')
         else:
             print(message.chat.id)
