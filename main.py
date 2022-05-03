@@ -33,6 +33,13 @@ def welcome(_, message):  # Done
         text = "Sorry {}, you are not an admin.🚫".format(message.chat.first_name)
         bot.send_message(message.chat.id, text)
     else:
+        msg_id = message.message_id+1
+        def send(text,message):
+            try:
+                bot.edit_message_text(message.chat.id, msg_id, text)
+            except:
+                bot.send_message(message.chat.id, text)
+                msg_id = msg_id+1
         if message.chat.id in admin_ids:
             count = 0
             print("Working")
@@ -51,6 +58,7 @@ def welcome(_, message):  # Done
                         if True and subtitle['title'] and subtitle is not None: # cond < 100
                             for num in range(len(subtitle['title'])):
                                 try:
+                                    send(f"Downloaded : {subtitle['title'][num]}", message)
                                     downloaded_file = download(subtitle['link'][num], subtitle['title'][num])
                                     for f in downloaded_file:
                                         file = f.replace('\\', '/')
