@@ -33,8 +33,7 @@ def welcome(_, message):  # Done
         text = "Sorry {}, you are not an admin.🚫".format(message.chat.first_name)
         bot.send_message(message.chat.id, text)
     else:
-        print(message)
-        msg_id = message.message_id+1
+        msg_id = message.id+1
         def send(text,message):
             try:
                 bot.edit_message_text(message.chat.id, msg_id, text)
