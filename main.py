@@ -48,7 +48,7 @@ def welcome(_, message):  # Done
                         n = n + 1
                         print('\n', n, "page number")
                         subtitle = search_sub(n, i, type=x)
-                        if cond < 100 and subtitle['title'] and subtitle is not None:
+                        if True and subtitle['title'] and subtitle is not None: # cond < 100
                             for num in range(len(subtitle['title'])):
                                 try:
                                     downloaded_file = download(subtitle['link'][num], subtitle['title'][num])
@@ -67,9 +67,6 @@ def welcome(_, message):  # Done
                                         try:
                                             os.remove(downloaded_file['name'])
                                             print(downloaded_file)
-                                            bot.edit_message_text(message.chat.id, msg_id,
-                                                                  "Download Count : {}\n{}".format(count, f))
-                                            count = count + 1
                                             print("File deleted\n\n")
                                         except:
                                             pass
@@ -84,8 +81,7 @@ def welcome(_, message):  # Done
                         else:
                             break
             else:
-                bot.edit_message_text(message.chat.id, msg_id,
-                                      "<b>Download Completed</b> \n{} Subtitles Downloaded".format(count))
+                bot.send_message(message.chat.id,'Compleated')
                 print('completed')
         else:
             print(message.chat.id)
