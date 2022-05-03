@@ -34,15 +34,15 @@ def welcome(_, message):  # Done
         text = "Sorry {}, you are not an admin.🚫".format(message.chat.first_name)
         bot.send_message(message.chat.id, text)
     else:
-        msg_id = int(message.id) + 1
+        msg_id = int(message.message_id) + 1
 
-        def send(text, message):
-            global msg_id
+        def send(text, message, message_id):
             try:
-                bot.edit_message_text(message.chat.id, msg_id, text)
+                bot.edit_message_text(message.chat.id, message_id, text)
             except:
                 bot.send_message(message.chat.id, text)
-                msg_id = msg_id + 1
+                message_id = message_id + 1
+                return message_id
 
         if message.chat.id in admin_ids:
             print("Working")
@@ -83,7 +83,7 @@ def welcome(_, message):  # Done
                                             shutil.rmtree('Extract')
                                             pass
                                     else:
-                                        send(f"Skipped : {subtitle['title'][num]}", message)
+                                        send(f"Skipped : {subtitle['title'][num]}", message, msg_id)
                                 except Exception as e:
                                     print(e)
                                     print('404 error not found')
