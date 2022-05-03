@@ -15,7 +15,8 @@ from plugins import (
     create_client,
     search_sub,
     download,
-    is_new_file
+    is_new_title,
+    save_file
 )
 
 local_time = datetime.now(pytz.timezone('Asia/Colombo'))
@@ -59,10 +60,11 @@ def welcome(_, message):  # Done
                         if subtitle['title'] and subtitle is not None:  # cond < 100
                             for num in range(len(subtitle['title'])):
                                 try:
-                                    if is_new_file(subtitle['title'][num]):
+                                    if is_new_title(subtitle['title'][num]):
                                         downloaded_file = download(subtitle['link'][num], subtitle['title'][num])
                                         for f in downloaded_file:
                                             file = f.replace('\\', '/')
+                                            save_file(file[file.rindex("/") + 1:])
                                             siteName = i.replace(i[0], i[0].upper())
                                             caption = f'<b>File Name : </b> \n{file[file.rindex("/") + 1:]}\n\n<b' \
                                                       f'>Source link : </b><a href="{subtitle["link"][num]}">from {siteName}' \
