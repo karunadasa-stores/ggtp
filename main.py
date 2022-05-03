@@ -34,7 +34,7 @@ def welcome(_, message):  # Done
         text = "Sorry {}, you are not an admin.🚫".format(message.chat.first_name)
         bot.send_message(message.chat.id, text)
     else:
-        msg_id = int(message.message_id) + 1
+        msg_id = int(message.id) + 1
 
         def send(text, message, message_id):
             try:
