@@ -30,13 +30,21 @@ Mclient = MongoClient("mongodb+srv://GavinduTharaka:Gavindu123@sinhalasubdownbot
 db = Mclient["Bot"]
 
 
-def is_new_file(file_name):
-    files = db["files"]
+def is_new_title(title_name):
+    files = db["titles"]
     try:
-        files.insert_one({'_id': file_name})
+        files.insert_one({'_id': title_name})
         return True
     except:
         return False
+    
+    
+def save_file(file_name):
+    files = db["files"]
+    try:
+        files.insert_one({'_id': file_name})
+    except:
+        pass
 
 
 def search_sub(search, website, type='film'):# finished
