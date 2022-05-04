@@ -16,7 +16,8 @@ from plugins import (
     search_sub,
     download,
     is_new_title,
-    save_file
+    save_file,
+    get_last_title
 )
 
 local_time = datetime.now(pytz.timezone('Asia/Colombo'))
@@ -30,19 +31,14 @@ bot.start()
 
 @bot.on_message(filters.private & filters.command(['start']))
 def welcome(_, message):  # Done
+    last = get_last_title()
+    is_true = False
     if message.chat.id not in admin_ids:
         text = "Sorry {}, you are not an admin.🚫".format(message.chat.first_name)
         bot.send_message(message.chat.id, text)
     else:
-        msg_id = int(message.id) + 1
-
-        def send(text, message, message_id):
-            try:
-                bot.edit_message_text(message.chat.id, message_id, text)
-            except:
-                bot.send_message(message.chat.id, text)
-                message_id = message_id + 1
-                return message_id
+        def send(text, message):
+            bot.send_message(message.chat.id, text)
 
         if message.chat.id in admin_ids:
             print("Working")
@@ -57,7 +53,16 @@ def welcome(_, message):  # Done
                         n = n + 1
                         print('\n', n, "page number")
                         subtitle = search_sub(n, i, type=x)
-                        if subtitle['title'] and subtitle is not None:  # cond < 100
+                        if last in subtitle['title']:
+                            is_true = True
+                            print(f'page {n} start')
+                            bot.send_message(message.chat.id, f'page {n} start')
+                        elif not subtitle['title']:
+                            break
+                        else:
+                            print(f'page {n} skip')
+                            bot.send_message(message.chat.id, f'page {n} skiped')
+                        if is_true and subtitle is not None:  # cond < 100
                             for num in range(len(subtitle['title'])):
                                 try:
                                     if is_new_title(subtitle['title'][num]):
@@ -83,11 +88,13 @@ def welcome(_, message):  # Done
                                             shutil.rmtree('Extract')
                                             pass
                                     else:
-                                        send(f"Skipped : {subtitle['title'][num]}", message, msg_id)
+                                        send(f"Skipped : {subtitle['title'][num]}", message)
                                 except Exception as e:
                                     print(e)
                                     print('404 error not found')
                                     pass
+                        elif not is_true:
+                            pass
                         else:
                             break
             else:
