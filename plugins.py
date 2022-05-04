@@ -30,6 +30,14 @@ Mclient = MongoClient("mongodb+srv://GavinduTharaka:Gavindu123@sinhalasubdownbot
 db = Mclient["Bot"]
 
 
+def get_last_title():
+    x = {}
+    for i in db.titles.find():
+        x = i
+    return str(x.get('_id'))
+
+
+
 def is_new_title(title_name):
     files = db["titles"]
     try:
